@@ -423,44 +423,6 @@ export default class Home extends Component {
             }}>
                 <View>
                     {index === 0 ? <View style={{ width: WIDTH, height: 10, backgroundColor: Color.f5f5f5 }} /> : <View />}
-                    <View style={{ backgroundColor: '#ffffff', flexDirection: 'row', paddingHorizontal: 20, paddingTop: 15, justifyContent: 'space-between' }}>
-                        <View style={{ flexDirection: 'row' }}>
-                            <Text style={{ color: '#666666', fontWeight: '100' }} onPress={() => {
-                                this.props.navigation.navigate('User', {
-                                    username: item.username,
-                                    userid: item.userid
-                                });
-                            }}>
-                                ^
-                                <Text>
-                                    {item.username}
-                                </Text>
-                                ^
-                            </Text>
-                        </View>
-                        <View style={{ flexDirection: 'row' }}>
-                            {(this.props.data.classid === '0' || this.props.data.classid === '1') ? <View style={{ flexDirection: 'row' }}>
-                                <Text style={{
-                                    marginLeft: 10,
-                                    paddingVertical: 2,
-                                    color: '#666666',
-                                    fontWeight: '100'
-                                }}>
-                                    {formatData(parseInt(item.newstime))}
-                                </Text>
-                            </View> :
-                                <View>
-                                    <Text style={{
-                                        paddingVertical: 2,
-                                        color: '#666666',
-                                        fontWeight: '100'
-                                    }}>
-                                        {formatData(parseInt(item.newstime))}
-                                    </Text>
-                                </View>
-                            }
-                        </View>
-                    </View>
                     <View style={{ backgroundColor: 'white', paddingHorizontal: 20}}>
                         {this.renderTextAndImage(item, index)}
                         <View
@@ -488,21 +450,19 @@ export default class Home extends Component {
 
                             </View>
                             <View style={{ flexDirection: 'row' }}>
-                                <View style={{ flexDirection: 'row', marginLeft: 10 }}>
+                                <View style={{ flexDirection: 'row', marginLeft: 20 }}>
                                     <TouchableOpacity activeOpacity={1} onPress={() => { this.PostThumb(item, 1, index) }} hitSlop={{ left: 10, right: 10, top: 10, bottom: 10 }}>
-                                        {item.isLike ? <IconSimple name="like" size={15} color='red' /> : <IconSimple name="like" size={15} color='#888' />}
+                                        {item.isLike ? <IconSimple name="like" size={20} color='red' /> : <IconSimple name="like" size={20} color='#888' />}
                                     </TouchableOpacity>
-                                    <Text style={{ marginLeft: 5, color: '#999', fontWeight: '100' }}>{item.diggtop && item.diggtop}</Text>
                                 </View>
-                                <View style={{ flexDirection: 'row', marginLeft: 10 }}>
+                                <View style={{ flexDirection: 'row', marginLeft: 20 }}>
                                     <TouchableOpacity activeOpacity={1} onPress={() => { this.PostThumb(item, 0, index) }} hitSlop={{ left: 10, right: 10, top: 10, bottom: 10 }}>
-                                        {item.isUnLike ? <IconSimple name="dislike" size={15} color='red' /> : <IconSimple name="dislike" size={15} color='#888' />}
+                                        {item.isUnLike ? <IconSimple name="dislike" size={20} color='red' /> : <IconSimple name="dislike" size={20} color='#888' />}
                                     </TouchableOpacity>
-                                    <Text style={{ marginLeft: 5, color: '#999', fontWeight: '100' }}>{item.diggbot && item.diggbot}</Text>
                                 </View>
-                                <View style={{ flexDirection: 'row', marginLeft: 10 }}>
+                                <View style={{ flexDirection: 'row', marginLeft: 20 }}>
                                     <TouchableOpacity activeOpacity={1} onPress={() => { this.show(item) }} hitSlop={{ left: 10, right: 10, top: 10, bottom: 10 }}>
-                                        <IconSimple name="share" size={15} color='#888' />
+                                        <IconSimple name="share" size={20} color='#888' />
                                     </TouchableOpacity>
                                 </View>
                             </View>

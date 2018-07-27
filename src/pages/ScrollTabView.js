@@ -56,9 +56,9 @@ import HttpUtil from  '../utils/HttpUtil';
 const NativeVersion = DeviceInfo.getVersion();
 export  default  class ScrollTabView extends Component {
     static navigationOptions = {
-        tabBarLabel: '最新',
+        tabBarLabel: '网名大全',
         tabBarIcon: ({tintColor,focused}) => (
-            <IconSimple name="fire" size={22} color={focused ? "red":'black'} />
+            <IconSimple name="eye" size={22} color={focused ? "red":'black'} />
         ),
         header: ({navigation}) => {
             return (

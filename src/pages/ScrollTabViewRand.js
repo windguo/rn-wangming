@@ -53,9 +53,9 @@ import HttpUtil from  '../utils/HttpUtil';
 // <Image source={require('../assets/reload.png')} style={{width: 25, height: 25}}/>
 export  default  class ScrollTabView extends Component {
     static navigationOptions = {
-        tabBarLabel: '签名',
+        tabBarLabel: '心情签名',
         tabBarIcon: ({tintColor,focused}) => (
-            <IconSimple name="shuffle" size={22} color={focused ? "red":'black'} />
+            <IconSimple name="bubble" size={22} color={focused ? "red":'black'} />
         ),
         header: ({navigation}) => {
             return (

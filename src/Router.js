@@ -19,6 +19,7 @@ import web from './pages/web';
 import Home from './pages/Home';
 import ScrollTabView from './pages/ScrollTabView';
 import ScrollTabViewRand from './pages/ScrollTabViewRand';
+import ScrollTabViewJoke from './pages/ScrollTabViewJoke';
 import Tab from './components/Tab'
 import Login from  './pages/Login'
 import SearchTag from './pages/Search/index';
@@ -77,6 +78,7 @@ const _configureTransition = () => {
 const TabNavigaApp = TabNavigator({
     New: { screen: ScrollTabView },
     Rand: { screen: ScrollTabViewRand },
+    ScrollTabViewJoke: { screen: ScrollTabViewJoke },
     My:{screen: My},
 },{
     lazy: false,
@@ -94,6 +96,7 @@ const NavgationApp = StackNavigator({
     Detail: {screen: Detail},
     Web: {screen: web},
     Add: {screen: Add},
+    ScrollTabViewJoke: { screen: ScrollTabViewJoke},
     Login: {screen: Login},
     Publish: {screen: Publish},
     Collection: {screen: Collection},
