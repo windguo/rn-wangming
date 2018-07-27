@@ -57,9 +57,9 @@ export default class Me extends Component {
         ),
         header: ({ navigation }) => {
             return (
-                <ImageBackground style={{ ...header }} source={require('../../assets/backgroundImageHeader.png')} resizeMode='cover'>
+                <ImageBackground style={{ ...header }}>
                     <View style={{ justifyContent: 'center', marginLeft: 10, alignItems: 'center', height: 43.7 }}></View>
-                    <Text style={{ fontSize: 16, textAlign: 'center', lineHeight: 43.7, color: 'white', fontWeight: '100' }}>个人中心</Text>
+                    <Text style={{ fontSize: 16, textAlign: 'center', lineHeight: 43.7, fontWeight: '100' }}>个人中心</Text>
                     <View style={{ justifyContent: 'center', marginRight: 10, alignItems: 'center', height: 43.7 }}></View>
                 </ImageBackground>
             )
@@ -319,7 +319,7 @@ export default class Me extends Component {
 
 }
 const header = {
-    backgroundColor: '#C7272F',
+    backgroundColor: '#fff',
     ...ifIphoneX({
         paddingTop: 44,
         height: 88

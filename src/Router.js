@@ -27,6 +27,7 @@ import My from './pages/My/Index';
 import Publish from './pages/My/Publish'
 import Collection from './pages/My/Collection'
 import User from './pages/User'
+import Add from './pages/Add'
 import Creat from './pages/Creat/index'
 import CreatTag from './pages/Creat/creat'
 const tabbaroption = {
@@ -78,7 +79,7 @@ const TabNavigaApp = TabNavigator({
     Rand: { screen: ScrollTabViewRand },
     My:{screen: My},
 },{
-    lazy: true,
+    lazy: false,
     swipeEnabled: false,
     tabBarPosition: 'bottom',
     animationEnabled: true,
@@ -92,6 +93,7 @@ const NavgationApp = StackNavigator({
     Index: {screen: TabNavigaApp},
     Detail: {screen: Detail},
     Web: {screen: web},
+    Add: {screen: Add},
     Login: {screen: Login},
     Publish: {screen: Publish},
     Collection: {screen: Collection},

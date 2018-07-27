@@ -54,12 +54,12 @@ export default class SearchTag extends Component {
         header: ({ navigation }) => {
             let textinput;
             return (
-                <ImageBackground style={{ ...header }} source={require('../../assets/backgroundImageHeader.png')} resizeMode='cover'>
-                    <TouchableOpacity activeOpacity={1} onPress={() => {
+                <ImageBackground style={{ ...header }}>
+                    <TouchableOpacity activeOpacity={0.6} onPress={() => {
                         navigation.goBack(null);
                     }}>
                         <View style={{ justifyContent: 'center', marginLeft: 10, alignItems: 'center', height: 43.7 }}>
-                            <IconSimple name="arrow-left" size={20} color='white' />
+                            <IconSimple name="arrow-left" size={20} />
                         </View>
                     </TouchableOpacity>
                     <View style={{
@@ -116,7 +116,7 @@ export default class SearchTag extends Component {
                             navigation.state.routes[navigation.state.routes.length-1].params && navigation.state.routes[navigation.state.routes.length-1].params.searchKey(SearchTag.key);
                             }}>
                             <View>
-                                <Text style={{color: '#ffffff',fontWeight:'300',fontSize:16,marginRight:10}}>生成网名</Text>
+                                <Text style={{fontWeight:'300',fontSize:16,marginRight:10}}>生成网名</Text>
                             </View>
                         </TouchableOpacity>
                     </View>
@@ -198,7 +198,7 @@ export default class SearchTag extends Component {
 }
 
 const header = {
-    backgroundColor: '#C7272F',
+    backgroundColor: '#fff',
     ...ifIphoneX({
         paddingTop: 44,
         height: 88

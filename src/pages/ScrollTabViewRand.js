@@ -53,13 +53,13 @@ import HttpUtil from  '../utils/HttpUtil';
 // <Image source={require('../assets/reload.png')} style={{width: 25, height: 25}}/>
 export  default  class ScrollTabView extends Component {
     static navigationOptions = {
-        tabBarLabel: '推荐',
+        tabBarLabel: '签名',
         tabBarIcon: ({tintColor,focused}) => (
             <IconSimple name="shuffle" size={22} color={focused ? "red":'black'} />
         ),
         header: ({navigation}) => {
             return (
-                <ImageBackground style={{ ...header }} source={require('../assets/backgroundImageHeader.png')} resizeMode='cover'>
+                <ImageBackground style={{ ...header }}>
                     <TouchableOpacity activeOpacity={1} onPress={() => {
                         navigation.state.routes[0].routes[0].params.leftFuc && navigation.state.routes[0].routes[0].params.leftFuc();
                     }}>
@@ -77,7 +77,8 @@ export  default  class ScrollTabView extends Component {
                     </TouchableOpacity>
                 </ImageBackground>
             )
-        }
+        },
+        header:null
     };
     //88  43.7 fontSize 17 fontWeight:600 RGBA0009 textALi;center
     constructor(props) {
@@ -224,9 +225,19 @@ export  default  class ScrollTabView extends Component {
                 }
             })
 
-            return <ScrollableTabBar activeTextColor='red' underlineStyle={{height: 0,width:0}}
-                                     backgroundColor='white' textStyle={{fontSize: 16, fontWeight:'100'}}
-                                     tabStyle={{paddingLeft: 10, paddingRight: 10}} />;
+            return <ScrollableTabBar
+                activeTextColor='red'
+                underlineStyle={{ height: 0, width: 0 }}
+                backgroundColor='white'
+                textStyle={{
+                    fontSize: 16,
+                    fontWeight: '100'
+                }}
+                tabStyle={{
+                    paddingLeft: 10,
+                    paddingRight: 10
+                }}
+            />;
         }
         pageNumber = (number) => {
             let page = 0;
@@ -271,8 +282,8 @@ export  default  class ScrollTabView extends Component {
             return this._renderError();
         } else {
             return (
-                <View style={{flex: 1}}>
-                    {Platform.OS === 'ios' ? <StatusBar barStyle="light-content"/> : null}
+                <View style={styles.wrap}>
+                    {/* {Platform.OS === 'ios' ? <StatusBar barStyle="light-content"/> : null} */}
                     <ScrollableTabView renderTabBar={this.renderTabBar} page={this.state.page}>
                         {this.renderContent(this.state.sectionList)}
                     </ScrollableTabView>
@@ -295,6 +306,40 @@ export  default  class ScrollTabView extends Component {
         alignItems:'flex-end'
     }
 const styles = StyleSheet.create({
+    wrap: {
+        flex: 1,
+        backgroundColor: '#fff',
+        ...ifIphoneX({
+            paddingTop: 44,
+            height: 88
+        }, {
+                paddingTop: Platform.OS === "ios" ? 20 : SCALE(StatusBarHeight()),
+                height: 64,
+            }),
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'flex-end'
+    },
+    cLeftSearchIcon: {
+        position: 'absolute',
+        zIndex: 10,
+        left: 5,
+        ...ifIphoneX({
+            top: 48
+        }, {
+                top: Platform.OS === "ios" ? 24 : SCALE(StatusBarHeight())
+            }),
+    },
+    cRightEditIcon: {
+        position: 'absolute',
+        zIndex: 10,
+        right: 15,
+        ...ifIphoneX({
+            top: 48
+        }, {
+                top: Platform.OS === "ios" ? 24 : SCALE(StatusBarHeight())
+            }),
+    },
     contain:{
         flex:1,
         justifyContent: 'center',

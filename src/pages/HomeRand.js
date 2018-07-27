@@ -390,7 +390,8 @@ export default class Home extends Component {
                 fontSize: 18,
                 lineHeight: 26,
                 color: item.isCopyed ? '#666666' : 'black',
-                paddingBottom: 15,
+                paddingTop: 10,
+                paddingBottom: 10,
                 fontWeight: '300'
             }} onPress={() => { this.setClipboardContent(item.title && item.title, index, item) }}>
                 {item.title && item.title.replace(/^(\r\n)|(\n)|(\r)/, "")}{'\n'}

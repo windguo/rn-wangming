@@ -53,7 +53,7 @@ export default class MyCollectLaugh extends Component {
     static navigationOptions = {
         header:({navigation}) =>{
             return (
-                <ImageBackground style={{...header}} source={require('../../assets/backgroundImageHeader.png')} resizeMode='cover'>
+                <ImageBackground style={{...header}}>
                     <TouchableOpacity activeOpacity={1} onPress={() => {
                         navigation.goBack(null);
                     }}>
@@ -587,7 +587,7 @@ const styles = StyleSheet.create({
     }
 });
 const header = {
-    backgroundColor: '#C7272F',
+    backgroundColor: '#fff',
     ...ifIphoneX({
         paddingTop: 44,
         height: 88

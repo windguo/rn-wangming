@@ -45,15 +45,15 @@ export  default  class web extends Component {
     static navigationOptions = {
         header:({navigation}) =>{
             return (
-                <ImageBackground style={{ ...header }} source={require('../assets/backgroundImageHeader.png')} resizeMode='cover'>
-                <TouchableOpacity activeOpacity={1} onPress={() => {
+                <ImageBackground style={{ ...header }}>
+                <TouchableOpacity activeOpacity={0.6} onPress={() => {
                     navigation.goBack(null);
                 }}>
                     <View style={{justifyContent:'center',marginLeft:10,alignItems:'center',height:43.7}}>
-                        <IconSimple name="arrow-left" size={20} color='white'/>
+                        <IconSimple name="arrow-left" size={20}/>
                     </View>
                 </TouchableOpacity>
-                <Text style={{fontSize:17,textAlign:'center',fontWeight:'bold',lineHeight:43.7,color:'white'}}> {navigation.state.routes[navigation.state.index].params && navigation.state.routes[navigation.state.index].params.WebTitle}</Text>
+                <Text style={{fontSize:17,textAlign:'center',fontWeight:'300',lineHeight:43.7}}> {navigation.state.routes[navigation.state.index].params && navigation.state.routes[navigation.state.index].params.WebTitle}</Text>
                 <TouchableOpacity activeOpacity={1} onPress={() => {
                 }}>
                     <View style={{justifyContent:'center',marginRight:10,alignItems:'center',height:43.7,backgroundColor:'transparent',width:20}}>
@@ -126,7 +126,7 @@ export  default  class web extends Component {
     _onRefresh = () =>{};
 }
 const header = {
-    backgroundColor: '#C7272F',
+    backgroundColor: '#fff',
     ...ifIphoneX({
         paddingTop: 44,
         height: 88

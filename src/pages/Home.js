@@ -402,9 +402,9 @@ export default class Home extends Component {
                     paddingTop: 10,
                     paddingBottom: 10,
                     fontWeight: '300'
-                }} onPress={() => { this.setClipboardContent(item.title && item.title, index, item) }}>
-                    {item.title && item.title.replace(/^(\r\n)|(\n)|(\r)/, "")}{'\n'}
-                    {item.ftitle && item.ftitle.replace(/^(\r\n)|(\n)|(\r)/, "")}
+                }} onPress={() => { this.setClipboardContent(item.title && item.title + item.ftitle && item.ftitle, index, item) }}>
+                    {item.title && item.title.replace(/(^\s*)|(\s*$)/g, "")}{'\n'}
+                    {item.ftitle && item.ftitle.replace(/(^\s*)|(\s*$)/g, "")}
                 </Text>
             </View>
         }else{
@@ -413,9 +413,11 @@ export default class Home extends Component {
                     fontSize: 18,
                     lineHeight: 26,
                     color: item.isCopyed ? '#666666' : 'black',
+                    paddingTop:10,
                     fontWeight: '300'
                 }} onPress={() => { this.setClipboardContent(item.title && item.title + item.ftitle && item.ftitle, index, item) }}>
-                    {item.title && item.title.replace(/^(\r\n)|(\n)|(\r)/, "")}{'\n'}                     {item.ftitle && item.ftitle.replace(/^(\r\n)|(\n)|(\r)/, "")}
+                    {item.title && item.title.replace(/(^\s*)|(\s*$)/g, "")}{'\n'}
+                    {item.ftitle && item.ftitle.replace(/(^\s*)|(\s*$)/g, "")}
                 </Text>
             </View>
         }
@@ -482,7 +484,7 @@ export default class Home extends Component {
                             }
                         </View>
                     </View>
-                    <View style={{ backgroundColor: 'white', paddingHorizontal: 20}}>
+                    <View style={{ backgroundColor: 'white', paddingHorizontal: 20, paddingTop: 10, paddingBottom: 10}}>
                         {this.renderTextAndImage(item,index)}
                         <View
                             style={{

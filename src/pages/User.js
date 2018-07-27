@@ -53,15 +53,15 @@ export default class User extends Component {
     static navigationOptions = {
         header: ({ navigation }) => {
             return (
-                <ImageBackground style={{ ...header }} source={require('../assets/backgroundImageHeader.png')} resizeMode='cover'>
+                <ImageBackground style={{ ...header }}>
                     <TouchableOpacity activeOpacity={1} onPress={() => {
                         navigation.goBack(null);
                     }}>
                         <View style={{ justifyContent: 'center', marginLeft: 10, alignItems: 'center', height: 43.7 }}>
-                            <IconSimple name="arrow-left" size={20} color='white' />
+                            <IconSimple name="arrow-left" size={20} />
                         </View>
                     </TouchableOpacity>
-                    <Text style={{ fontSize: 17, textAlign: 'center', fontWeight: 'bold', lineHeight: 43.7, color: 'white' }}>{navigation.state.routes[navigation.state.index].params && navigation.state.routes[navigation.state.index].params.username + '发布的内容'}</Text>
+                    <Text style={{ fontSize: 17, textAlign: 'center', fontWeight: '300', lineHeight: 43.7}}>{navigation.state.routes[navigation.state.index].params && navigation.state.routes[navigation.state.index].params.username + '发布的内容'}</Text>
                     <TouchableOpacity activeOpacity={1} onPress={() => {
                     }}>
                         <View style={{ justifyContent: 'center', marginRight: 10, alignItems: 'center', height: 43.7, backgroundColor: 'transparent', width: 20 }}>
@@ -434,33 +434,6 @@ export default class User extends Component {
             }}>
                 <View>
                     {index === 0 ? <View style={{width:WIDTH,height:10,backgroundColor:Color.f5f5f5}}/> :<View/>}
-                    <View style={{ backgroundColor:'#ffffff',flexDirection: 'row', paddingHorizontal: 20, paddingTop: 15, justifyContent: 'space-between' }}>
-                        <View style={{ flexDirection: 'row' }}>
-                            <Text style={{ color: '#666666', fontWeight: '100' }} onPress={() => {
-                                this.props.navigation.navigate('User', {
-                                    username: item.username,
-                                    userid: item.userid
-                                });
-                            }}>
-                                ^
-                                <Text>
-                                    {item.username}
-                                </Text>
-                                ^
-                            </Text>
-                        </View>
-                        <View style={{ flexDirection: 'row' }}>
-                                <View>
-                                    <Text style={{
-                                        paddingVertical: 2,
-                                        color: '#666666',
-                                        fontWeight: '100'
-                                    }}>
-                                        {formatData(parseInt(item.newstime))}
-                                    </Text>
-                                </View>
-                        </View>
-                    </View>
                     <View style={{ backgroundColor: 'white', paddingHorizontal: 20,paddingTop:10}}>
                         {this.renderTextAndImage(item,index)}
                         <View
@@ -596,7 +569,7 @@ const styles = StyleSheet.create({
     }
 });
 const header = {
-    backgroundColor: '#C7272F',
+    backgroundColor: '#fff',
     ...ifIphoneX({
         paddingTop: 44,
         height: 88

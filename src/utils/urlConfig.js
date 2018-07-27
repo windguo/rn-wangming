@@ -20,12 +20,12 @@ export default urlConfig = {
     // sectionList:'/e/api/?getJson=class',
     sectionList:'/e/api/wangming?getJson=class',
 //随机
-    sectionListRand:'/e/api/wangming?getJson=classRand',
+    sectionListRand:'/e/api/wangming?getJson=qianmingClass',
     //栏目列表数据后面拼接&classid=3
     // sectionListData:'/e/api/?getJson=column',
     sectionListData:'/e/api/wangming?getJson=column',
 //随机
-    sectionListDataRand:'/e/api/wangming?getJson=column',
+    sectionListDataRand:'/e/api/wangming?getJson=qianmingColumn',
     //发布地址
     pubLishUrl:'http://m.jianjie8.com/wangmingFromapp',
     //点赞或者踩 {classid:2,id:2,dotop:1,doajax:1,ajaxarea:'diggnum'dotop这个字段 传0 是踩踩 传1是赞}
