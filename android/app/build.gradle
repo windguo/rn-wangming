@@ -105,11 +105,11 @@ android {
     buildToolsVersion '27.0.3'
 
     defaultConfig {
-        applicationId "com.windguo.h8.vc"
+        applicationId "com.windguos.h8.vc.wangming"
         minSdkVersion 19
         targetSdkVersion 26
         versionCode 1
-        versionName "2.0.2"
+        versionName "1.0.9"
         manifestPlaceholders = [
                 JPUSH_APPKEY: "b0fccf1d571ed454fb27f0af",
                 APP_CHANNEL : "default"
@@ -121,10 +121,12 @@ android {
     }
     signingConfigs {
         release {
-            storeFile file('/Users/zhangzuohua/desktop/key')
-            storePassword '123456'
-            keyAlias 'key0'
-            keyPassword '123456'
+            if (project.hasProperty('MYAPP_RELEASE_STORE_FILE')) {
+                storeFile file(MYAPP_RELEASE_STORE_FILE)
+                storePassword MYAPP_RELEASE_STORE_PASSWORD
+                keyAlias MYAPP_RELEASE_KEY_ALIAS
+                keyPassword MYAPP_RELEASE_KEY_PASSWORD
+            }
         }
     }
     splits {
