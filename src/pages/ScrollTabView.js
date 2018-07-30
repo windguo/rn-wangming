@@ -596,6 +596,7 @@ const styles = StyleSheet.create({
         }, {
             top: Platform.OS === "ios" ? 24 : SCALE(StatusBarHeight())
         }),
+        top: 3,
     },
     cRightEditIcon:{
         position: 'absolute',
@@ -604,8 +605,9 @@ const styles = StyleSheet.create({
         ...ifIphoneX({
             top: 48
         }, {
-                top: Platform.OS === "ios" ? 24 : SCALE(StatusBarHeight())
-            }),
+            top: Platform.OS === "ios" ? 24 : SCALE(StatusBarHeight())
+        }),
+        top: 3,
     },
     contain:{
         flex:1,
