@@ -122,7 +122,7 @@ export default class Search extends Component {
                             navigation.state.routes[navigation.state.routes.length-1].params && navigation.state.routes[navigation.state.routes.length-1].params.searchKey(Search.key);
                         }}>
                             <View>
-                                <Text style={{color: '#ffffff',fontWeight:'bold',fontSize:16,marginRight:10}}>搜 索</Text>
+                                <Text style={{fontWeight:'300',fontSize:16,marginRight:10}}>搜 索</Text>
                             </View>
                         </TouchableOpacity>
                     </View>

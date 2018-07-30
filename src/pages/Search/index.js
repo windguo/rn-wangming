@@ -87,7 +87,7 @@ export default class SearchTag extends Component {
                                 marginHorizontal: 20, 
                                 width: WIDTH - 140,
                                 height: 32,
-                                paddingHorizontal: 20,
+                                paddingHorizontal: 10,
                                 paddingTop:0,
                                 paddingBottom:0,
                                 backgroundColor: '#ffffff'
@@ -117,7 +117,7 @@ export default class SearchTag extends Component {
                             navigation.state.routes[navigation.state.routes.length-1].params && navigation.state.routes[navigation.state.routes.length-1].params.searchKey(SearchTag.key);
                             }}>
                             <View>
-                                <Text style={{color: '#ffffff',fontWeight:'bold',fontSize:16,marginRight:10}}>搜 索</Text>
+                                <Text style={{fontWeight:'300',fontSize:16,marginRight:10}}>搜索</Text>
                             </View>
                         </TouchableOpacity>
                     </View>
