@@ -42,7 +42,7 @@ import Button from '../components/Button';
 const WIDTH = Dimensions.get('window').width;
 const HEIGHT = Dimensions.get('window').height;
 import { ifIphoneX } from '../utils/iphoneX';
-import HomeJoke from './HomeJoke';
+import HomeTouxiang from './HomeTouxiang';
 import codePush from 'react-native-code-push'
 import SplashScreen from 'react-native-splash-screen'
 import * as WeChat from 'react-native-wechat';
@@ -57,9 +57,9 @@ import Ionicon from 'react-native-vector-icons/Ionicons';
 const NativeVersion = DeviceInfo.getVersion();
 export default class ScrollTabView extends Component {
     static navigationOptions = {
-        tabBarLabel: '内涵段子',
+        tabBarLabel: '个性头像',
         tabBarIcon: ({ tintColor, focused }) => (
-            <Ionicon name="md-happy" size={22} color={focused ? 'red' : '#666'} />
+            <IconSimple name="graduation" size={22} color={focused ? 'red':'#666'} />
         ),
         header: ({ navigation }) => {
             return (
@@ -324,7 +324,7 @@ export default class ScrollTabView extends Component {
     }
 
     loadData = async () => {
-        let url = urlConfig.sectionListJokeClass;
+        let url = urlConfig.sectionListTouxiangClass;
         console.log('sectionList', url);
         let res = await HttpUtil.GET(url);
         if (!res || !res.result) {
@@ -370,7 +370,7 @@ export default class ScrollTabView extends Component {
     renderContent = (sectionList) => {
         let list = [];
         list.push(sectionList.map((data, index) => {
-            return <HomeJoke tabLabel={data.classname} data={data} {...this.props} pageNumber={(number) => {
+            return <HomeTouxiang tabLabel={data.classname} data={data} {...this.props} pageNumber={(number) => {
                 this.pageNumber(number)
             }} index={index} />
         }));

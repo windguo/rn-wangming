@@ -18,8 +18,11 @@ import Detail from './pages/Detail';
 import web from './pages/web';
 import Home from './pages/Home';
 import ScrollTabView from './pages/ScrollTabView';
+import PublishWangming from './pages/Publish/Wangming';
+import ScrollTabViewAdd from './pages/ScrollTabViewAdd';
 import ScrollTabViewRand from './pages/ScrollTabViewRand';
 import ScrollTabViewJoke from './pages/ScrollTabViewJoke';
+import ScrollTabViewTouxiang from './pages/ScrollTabViewTouxiang';
 import Tab from './components/Tab'
 import Login from  './pages/Login'
 import SearchTag from './pages/Search/index';
@@ -78,8 +81,10 @@ const _configureTransition = () => {
 const TabNavigaApp = TabNavigator({
     New: { screen: ScrollTabView },
     Rand: { screen: ScrollTabViewRand },
+    // ScrollTabViewAdd: { screen: ScrollTabViewAdd },
     ScrollTabViewJoke: { screen: ScrollTabViewJoke },
-    My:{screen: My},
+    ScrollTabViewTouxiang: { screen: ScrollTabViewTouxiang },
+    // My:{screen: My},
 },{
     lazy: false,
     swipeEnabled: false,
@@ -95,8 +100,10 @@ const NavgationApp = StackNavigator({
     Index: {screen: TabNavigaApp},
     Detail: {screen: Detail},
     Web: {screen: web},
-    Add: {screen: Add},
+    My: {screen: My},
+    PublishWangming: { screen: PublishWangming},
     ScrollTabViewJoke: { screen: ScrollTabViewJoke},
+    ScrollTabViewTouxiang: { screen: ScrollTabViewTouxiang},
     Login: {screen: Login},
     Publish: {screen: Publish},
     Collection: {screen: Collection},

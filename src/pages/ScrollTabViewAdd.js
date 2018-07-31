@@ -42,7 +42,6 @@ import Button from '../components/Button';
 const WIDTH = Dimensions.get('window').width;
 const HEIGHT = Dimensions.get('window').height;
 import {ifIphoneX} from '../utils/iphoneX';
-import Home from './Home';
 import codePush from 'react-native-code-push'
 import SplashScreen from 'react-native-splash-screen'
 import * as WeChat from 'react-native-wechat';
@@ -56,32 +55,25 @@ import HttpUtil from  '../utils/HttpUtil';
 const NativeVersion = DeviceInfo.getVersion();
 export  default  class ScrollTabView extends Component {
     static navigationOptions = {
-        tabBarLabel: '网名大全',
+        tabBarLabel: '发布信息',
         tabBarIcon: ({tintColor,focused}) => (
-            <IconSimple name="eye" size={22} color={focused ? "red":'#666'} />
+            <MaterialIcons name="add-circle-outline" size={26} color={focused ? "red" : '#666'} />
         ),
-        header: ({navigation}) => {
+        header: ({ navigation }) => {
             return (
-                <ImageBackground style={{ ...header }} source={require('../assets/backgroundImageHeader.png')} resizeMode='cover'>
-                    <TouchableOpacity activeOpacity={1} onPress={() => {
-                        navigation.state.routes[0].routes[0].params.leftFuc && navigation.state.routes[0].routes[0].params.leftFuc();
+                <ImageBackground style={{ ...header }}>
+                    <TouchableOpacity activeOpacity={0.6} onPress={() => {
+                        // navigation.goBack(null);
                     }}>
                         <View style={{ justifyContent: 'center', marginLeft: 10, alignItems: 'center', height: 43.7 }}>
-                            <MaterialIcons name="search" size={25} color='white' />
+                            <IconSimple name="arrow-left" size={20} color="#fff" />
                         </View>
                     </TouchableOpacity>
-                    <Text style={{ fontSize: 17, textAlign: 'center', lineHeight: 43.7, color: 'white', fontWeight: '100' }}>网名大全</Text>
-                    <TouchableOpacity activeOpacity={1} onPress={() => {
-                        navigation.state.routes[0].routes[0].params.rightFuc && navigation.state.routes[0].routes[0].params.rightFuc();
-                    }}>
-                        <View style={{ justifyContent: 'center', marginRight: 10, alignItems: 'center', height: 43.7 }}>
-                            <MaterialIcons name="center-focus-strong" size={25} color='white' />
-                        </View>
-                    </TouchableOpacity>
+                    <Text style={{ fontSize: 16, textAlign: 'center', lineHeight: 43.7, fontWeight: '100' }}>发布信息</Text>
+                    <View style={{ justifyContent: 'center', marginRight: 10, alignItems: 'center', height: 43.7 }}></View>
                 </ImageBackground>
             )
-        },
-        header:null
+        }
     };
     //88  43.7 fontSize 17 fontWeight:600 RGBA0009 textALi;center
     constructor(props) {
@@ -89,6 +81,9 @@ export  default  class ScrollTabView extends Component {
         this.state = {
             sectionList: [],
             page: 0,
+            username: '',
+            userpwd: '',
+            userName: null,
             renderLoading:false,
             renderError:false,
             showModal:false,
@@ -358,53 +353,53 @@ export  default  class ScrollTabView extends Component {
         this.setState({sectionList: result});
         console.log('res', res);
     };
-        renderTab = (tabs) => {
-            let array = [];
-            array.push(tabs.map((item) => {
-                return <Text style={{width: 50, height: 20}}>{item}</Text>
-            }));
-            return array;
-        }
-        renderTabBar = (params) => {
-            global.activeTab = params.activeTab;
-            this.state.sectionList.forEach((v, i) => {
-                if (i === params.activeTab) {
-                    global.activeClassId = v.classid
-                }
-            })
+    renderTab = (tabs) => {
+        let array = [];
+        array.push(tabs.map((item) => {
+            return <Text style={{width: 50, height: 20}}>{item}</Text>
+        }));
+        return array;
+    }
+    renderTabBar = (params) => {
+        global.activeTab = params.activeTab;
+        this.state.sectionList.forEach((v, i) => {
+            if (i === params.activeTab) {
+                global.activeClassId = v.classid
+            }
+        })
 
-            return <ScrollableTabBar 
-                activeTextColor='red' 
-                underlineStyle={{height: 0,width:0}}
-                backgroundColor='white'
-                style={{marginLeft:45,marginRight:45}}
-                textStyle={{
-                    fontSize: 16, 
-                    fontWeight:'300'
-                }}
-                tabStyle={{
-                    paddingLeft: 10, 
-                    paddingRight: 10}} 
-                />;
-        }
-        pageNumber = (number) => {
-            let page = 0;
-            this.state.sectionList.forEach((v, i) => {
-                if (parseInt(v.classid) === number) {
-                    page = i
-                }
-            })
-            this.setState({page: page});
-        }
-        renderContent = (sectionList) => {
-            let list = [];
-            list.push(sectionList.map((data, index) => {
-                return <Home tabLabel={data.classname} data={data} {...this.props} pageNumber={(number) => {
-                    this.pageNumber(number)
-                }} index={index}/>
-            }));
-            return list;
-        }
+        return <ScrollableTabBar 
+            activeTextColor='red' 
+            underlineStyle={{height: 0,width:0}}
+            backgroundColor='white'
+            style={{marginLeft:45,marginRight:45}}
+            textStyle={{
+                fontSize: 16, 
+                fontWeight:'100'
+            }}
+            tabStyle={{
+                paddingLeft: 10, 
+                paddingRight: 10}} 
+            />;
+    }
+    pageNumber = (number) => {
+        let page = 0;
+        this.state.sectionList.forEach((v, i) => {
+            if (parseInt(v.classid) === number) {
+                page = i
+            }
+        })
+        this.setState({page: page});
+    }
+    renderContent = (sectionList) => {
+        let list = [];
+        list.push(sectionList.map((data, index) => {
+            return <Home tabLabel={data.classname} data={data} {...this.props} pageNumber={(number) => {
+                this.pageNumber(number)
+            }} index={index}/>
+        }));
+        return list;
+    }
     _renderError = (params)=>{
         return (
             <View style={[styles.contain,{justifyContent:'center',alignItems:'center'}]}>
@@ -509,68 +504,85 @@ export  default  class ScrollTabView extends Component {
         </View>;
         }else{}
 
+    }
+    callBack = (username) => {
+        this.setState({ username: username });
+    }
+    pushToWeb = (params) => {
+        if (!this.state.username) {
+            this.props.navigation.navigate('Login', { callBack: this.callBack });
+            return;
         }
+        let url = '';
+        if (params === 'publishWangming') {
+            url = urlConfig.publishWangming;
+        } else if (params === 'yhsyxy') {
+            url = urlConfig.agreementURL;
+        }
+        this.props.navigation.navigate('Web', { url: url });
+    }
     render() {
-        if (this.state.renderLoading) {
-            return this._renderLoading();
-        } else if (this.state.renderError) {
-            return this._renderError();
-        } else {
-            if(this.state.sectionList.length<1){
-                return this._renderError("暂无数据点击请求");
-            }
-            return (
-                <View style={styles.wrap}>
-                    {/* {Platform.OS === 'ios' ? <StatusBar barStyle="light-content"/> : null} */}
-                    <View style={styles.cLeftSearchIcon}>
-                        <TouchableOpacity activeOpacity={0.6} onPress={() => {
-                            this.props.navigation.navigate('My')
-                    }}>
-                        <View style={{ justifyContent: 'center',fontWeight:'100', marginLeft: 10, alignItems: 'center', height: 43.7 }}>
-                                <IconSimple name="user" size={20} color='#666' />
+        return (
+            <ScrollView style={{ flex: 1, backgroundColor: Color.f5f5f5 }}>
+                <View style={{ width: WIDTH, height: 10, backgroundColor: Color.f5f5f5 }} />
+                <TouchableOpacity activeOpacity={1} onPress={() => { this.pushToWeb('publishWangming') }}>
+                    <View style={{ flexDirection: 'row', alignItems: 'center', height: 50, backgroundColor: 'white', justifyContent: 'space-between' }}>
+                        <View style={{ marginLeft: 20, flexDirection: 'row', alignItems: 'center' }}>
+                            <IconSimple name="user" size={22} color={Color.FontColor} />
+                            <Text style={{ marginLeft: 10 }}>发布网名</Text>
                         </View>
-                    </TouchableOpacity>
+                        <IconSimple name="arrow-right" size={18} color={Color.FontColor} style={{ marginRight: 20 }} />
                     </View>
-                    <View style={styles.cRightEditIcon}>
-                        <TouchableOpacity activeOpacity={0.6} onPress={() => {
-                            this.props.navigation.navigate('SearchTag')
-                        }}>
-                            <View style={{ justifyContent: 'center', fontWeight: '100', marginLeft: 10, alignItems: 'center', height: 43.7 }}>
-                                <MaterialIcons name="search" size={25} color='#666' />
-                            </View>
-                        </TouchableOpacity>
+                </TouchableOpacity>
+                <View style={{ width: WIDTH, height: 10, backgroundColor: Color.f5f5f5 }} />
+                <TouchableOpacity activeOpacity={1} onPress={this.clickToPublishWangming}>
+                    <View style={{ flexDirection: 'row', alignItems: 'center', height: 50, backgroundColor: 'white', justifyContent: 'space-between' }}>
+                        <View style={{ marginLeft: 20, flexDirection: 'row', alignItems: 'center' }}>
+                            <IconSimple name="user" size={22} color={Color.FontColor} />
+                            <Text style={{ marginLeft: 10 }}>发布签名</Text>
+                        </View>
+                        <IconSimple name="arrow-right" size={18} color={Color.FontColor} style={{ marginRight: 20 }} />
                     </View>
-                    <ScrollableTabView renderTabBar={this.renderTabBar} page={this.state.page}>
-                        {this.renderContent(this.state.sectionList)}
-                    </ScrollableTabView>
-                    <Modal
-                         animationType='fade'        // 淡入淡出
-                         transparent={true}              // 透明
-                         visible={this.state.showModal}    // 根据isModal决定是否显示
-                         onRequestClose={() => {this.onRequestClose()}}  // android必须实现
-                     >
-                        {this.renderModal()}
-                     </Modal>
-                </View>
-
-            );
-        }
+                </TouchableOpacity>
+                <View style={{ width: WIDTH, height: 10, backgroundColor: Color.f5f5f5 }} />
+                <TouchableOpacity activeOpacity={1} onPress={this.clickToPublishWangming}>
+                    <View style={{ flexDirection: 'row', alignItems: 'center', height: 50, backgroundColor: 'white', justifyContent: 'space-between' }}>
+                        <View style={{ marginLeft: 20, flexDirection: 'row', alignItems: 'center' }}>
+                            <IconSimple name="user" size={22} color={Color.FontColor} />
+                            <Text style={{ marginLeft: 10 }}>发布内涵段子</Text>
+                        </View>
+                        <IconSimple name="arrow-right" size={18} color={Color.FontColor} style={{ marginRight: 20 }} />
+                    </View>
+                </TouchableOpacity>
+                <View style={{ width: WIDTH, height: 10, backgroundColor: Color.f5f5f5 }} />
+                <TouchableOpacity activeOpacity={1} onPress={this.clickToPublishWangming}>
+                    <View style={{ flexDirection: 'row', alignItems: 'center', height: 50, backgroundColor: 'white', justifyContent: 'space-between' }}>
+                        <View style={{ marginLeft: 20, flexDirection: 'row', alignItems: 'center' }}>
+                            <IconSimple name="user" size={22} color={Color.FontColor} />
+                            <Text style={{ marginLeft: 10 }}>发布头像</Text>
+                        </View>
+                        <IconSimple name="arrow-right" size={18} color={Color.FontColor} style={{ marginRight: 20 }} />
+                    </View>
+                </TouchableOpacity>
+            </ScrollView>
+        )
     }
 
 }
-    const header = {
-        backgroundColor: '#C7272F',
-        ...ifIphoneX({
-            paddingTop: 44,
-            height: 88
-        }, {
-            paddingTop: Platform.OS === "ios" ? 20 : SCALE(StatusBarHeight()),
-            height:64,
-        }),
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems:'flex-end'
-    }
+
+const header = {
+    backgroundColor: '#fff',
+    ...ifIphoneX({
+        paddingTop: 44,
+        height: 88
+    }, {
+        paddingTop: Platform.OS === "ios" ? 20 : SCALE(StatusBarHeight()),
+        height:64,
+    }),
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems:'flex-end'
+}
 
 const styles = StyleSheet.create({
     wrap:{

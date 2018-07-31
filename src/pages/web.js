@@ -101,22 +101,6 @@ export  default  class web extends Component {
        // this._checkNeededCookies();
     }
     render() {
-       //  const patchPostMessageFunction = function() {
-       //      var originalPostMessage = window.postMessage;
-       //
-       //      var patchedPostMessage = function(message, targetOrigin, transfer) {
-       //          originalPostMessage(message, targetOrigin, transfer);
-       //      };
-       //
-       //      patchedPostMessage.toString = function() {
-       //          return String(Object.hasOwnProperty).replace('hasOwnProperty', 'postMessage');
-       //      };
-       //
-       //      window.postMessage = patchedPostMessage;
-       //  };
-        //onMessage={this._onMessage} injectedJavaScript={patchPostMessageJsCode}
-
-       // const patchPostMessageJsCode = '(' + String(patchPostMessageFunction) + ')();window.postMessage(document.cookie)';
         return (
             <WebView source={{uri: this.pubLishUrl}} onNavigationStateChange={(e) => {
                 this.onNavigationStateChange(e)
@@ -127,6 +111,8 @@ export  default  class web extends Component {
 }
 const header = {
     backgroundColor: '#fff',
+    borderBottomColor:'#f5f5f5',
+    borderBottomWidth:1,
     ...ifIphoneX({
         paddingTop: 44,
         height: 88

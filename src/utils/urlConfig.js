@@ -29,6 +29,9 @@ export default urlConfig = {
 
     sectionListJokeClass: '/e/api/wangming?getJson=JokeClass',
     sectionListJoke: '/e/api/wangming?getJson=JokeColumn',
+    sectionListTouxiangClass: '/e/api/qianming?getJson=touxiangClass',
+    sectionListDataBiaoqing: '/e/api/qianming?getJson=biaoqingColumn',
+    sectionListDataTouxiang: '/e/api/qianming?getJson=touxiangColumn',
 
     //发布地址
     pubLishUrl:'http://m.jianjie8.com/wangmingFromapp',
@@ -48,7 +51,8 @@ export default urlConfig = {
     //复制完跳去详情
      DetailUrl: "http://m.jianjie8.com/detail/",
      Search:'/e/api/wangming/?classid=29&getJson=',
-    CreatUrl:'/e/api/wangming/creat/?getJson=c&keyword='
+    CreatUrl:'/e/api/wangming/creat/?getJson=c&keyword=',
+    publishWangming:'http://wangming.jianjie8.com/edit'
 
 
 }

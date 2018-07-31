@@ -58,7 +58,13 @@ export default class Me extends Component {
         header: ({ navigation }) => {
             return (
                 <ImageBackground style={{ ...header }}>
-                    <View style={{ justifyContent: 'center', marginLeft: 10, alignItems: 'center', height: 43.7 }}></View>
+                    <TouchableOpacity activeOpacity={0.6} onPress={() => {
+                        navigation.goBack(null);
+                    }}>
+                        <View style={{ justifyContent: 'center', marginLeft: 10, alignItems: 'center', height: 43.7 }}>
+                            <IconSimple name="arrow-left" size={20} />
+                        </View>
+                    </TouchableOpacity>
                     <Text style={{ fontSize: 16, textAlign: 'center', lineHeight: 43.7, fontWeight: '100' }}>个人中心</Text>
                     <View style={{ justifyContent: 'center', marginRight: 10, alignItems: 'center', height: 43.7 }}></View>
                 </ImageBackground>

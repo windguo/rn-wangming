@@ -4297,6 +4297,10 @@ react-native-progress@^3.4.0:
   dependencies:
     prop-types "^15.5.8"
 
+react-native-radio-master@^1.0.1:
+  version "1.0.1"
+  resolved "http://registry.npm.taobao.org/react-native-radio-master/download/react-native-radio-master-1.0.1.tgz#a3c375875e5d1130682a3ac72610713e5da163ea"
+
 react-native-root-siblings@^3.0.0:
   version "3.1.0"
   resolved "https://registry.yarnpkg.com/react-native-root-siblings/-/react-native-root-siblings-3.1.0.tgz#194067d37d4d2c824d923148e53922ee6ac2e06f"

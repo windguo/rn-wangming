@@ -19,6 +19,7 @@
     "react-native-image-progress": "https://github.com/h8vc/react-native-image-progress.git",
     "react-native-keyboard-aware-scroll-view": "^0.5.0",
     "react-native-progress": "^3.4.0",
+    "react-native-radio-master": "^1.0.1",
     "react-native-root-toast": "^3.0.0",
     "react-native-scrollable-tab-view": "https://github.com/qianbaofe/react-native-scrollable-tab-view.git",
     "react-native-splash-screen": "^3.0.6",

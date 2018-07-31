@@ -25,12 +25,14 @@ import {
     LayoutAnimation,
     NativeModules,
     ImageBackground,
+    CameraRoll,
     FlatList,
     Clipboard
 } from 'react-native';
 import urlConfig  from  '../utils/urlConfig';
 import ModalUtil from '../utils/modalUtil';
 import formatData from '../utils/formatData';
+import { ifIphoneX } from '../utils/iphoneX';
 import Toast from 'react-native-root-toast';
 import LoadError from  '../components/loadError';
 const WIDTH = Dimensions.get('window').width;
@@ -38,7 +40,10 @@ const HEIGHT = Dimensions.get('window').height;
 import PullList from '../components/pull/PullList'
 import storageKeys from '../utils/storageKeyValue'
 import * as WeChat from 'react-native-wechat';
+import Icon from 'react-native-vector-icons/FontAwesome';
 import IconSimple from 'react-native-vector-icons/SimpleLineIcons';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import Ionicon from 'react-native-vector-icons/Ionicons';
 import HttpUtil from  '../utils/HttpUtil';
 import ImageProgress from 'react-native-image-progress';
 import {Pie,Bar,Circle,CircleSnail} from 'react-native-progress';
@@ -63,23 +68,9 @@ export default class Home extends Component {
     componentWillMount() {
         this._ViewHeight = new Animated.Value(0);
     }
-    readUserCache = () => {
-        READ_CACHE(storageKeys.userInfo, (res) => {
-            if (res && res.userid) {
-                GLOBAL.userInfo = res
-                console.log('userInfo', res);
-            } else {
-                console.log('获取用户信息失败');
-            }
-        }, (err) => {
-            console.log('获取用户信息失败');
-        });
-
-    }
     componentDidMount() {
-        this.readUserCache();
         this.refTextArray = [];
-        this.subscription = DeviceEventEmitter.addListener('reloadData', this.refreshing);
+        this.subscription = DeviceEventEmitter.addListener('reloadDataRand', this.refreshing);
         InteractionManager.runAfterInteractions(() => {
             this.loadData();
         });
@@ -104,38 +95,36 @@ export default class Home extends Component {
                 hideOnPress: true,
                 delay: 0,
             });
-        }catch (e){}
+        }catch (e){this.ToastShow(e.message)}
     }
 
-    share = async()=>{
+    share = async () => {
         let data = await NativeModules.NativeUtil.showDialog();
-        if (data.wechat === 3){
+        if (data.wechat === 3) {
             this.clickToReport();
             return;
         }
-        if(data){
+        if (data) {
             WeChat.isWXAppInstalled().then((isInstalled) => {
                 if (isInstalled) {
                     if (data.wechat === 1) {
                         WeChat.shareToSession({
-                            title: "【网名分享】",
-                            description: this._shareItem && this._shareItem.title.replace(/^(\r\n)|(\n)|(\r)/,""),
-                            type: 'text',
-                            webpageUrl: urlConfig.DetailUrl + this._shareItem.classid + '/' + this._shareItem.id,
-                            thumbImage: urlConfig.thumbImage,
-                        }).then((message)=>{message.errCode === 0  ? this.ToastShow('分享成功') : this.ToastShow('分享失败')}).catch((error) => {
+                            imageUrl: this._shareItem && this._shareItem.nurl,
+                            titlepicUrl: this._shareItem && this._shareItem.titlepic,
+                            type: 'imageUrl',
+                            webpageUrl: urlConfig.DetailUrl + this._shareItem.classid + '/' + this._shareItem.id
+                        }).then((message) => { message.errCode === 0 ? this.ToastShow('分享成功') : this.ToastShow('分享失败') }).catch((error) => {
                             if (error.message != -2) {
                                 Toast.show(error.message);
                             }
                         });
-                    } else if(data.wechat === 2){
-                        WeChat.shareToTimeline({
-                            title: "【网名分享】" + this._shareItem && this._shareItem.title.replace(/^(\r\n)|(\n)|(\r)/,""),
-                            description: this._shareItem && this._shareItem.title.replace(/^(\r\n)|(\n)|(\r)/,""),
-                            type: 'text',
-                            webpageUrl: urlConfig.DetailUrl + this._shareItem.classid + '/' + this._shareItem.id,
-                            thumbImage: urlConfig.thumbImage,
-                        }).then((message)=>{message.errCode === 0  ? this.ToastShow('分享成功') : this.ToastShow('分享失败')}).catch((error) => {
+                    } else if (data.wechat === 2) {
+                        WeChat.shareToSession({
+                            imageUrl: this._shareItem && this._shareItem.nurl,
+                            titlepicUrl: this._shareItem && this._shareItem.titlepic,
+                            type: 'imageUrl',
+                            webpageUrl: urlConfig.DetailUrl + this._shareItem.classid + '/' + this._shareItem.id
+                        }).then((message) => { message.errCode === 0 ? this.ToastShow('分享成功') : this.ToastShow('分享失败') }).catch((error) => {
                             if (error.message != -2) {
                                 Toast.show(error.message);
                             }
@@ -145,15 +134,17 @@ export default class Home extends Component {
                     Toast.show("没有安装微信软件，请您安装微信之后再试");
                 }
             });
-            console.log('data',data)
+            console.log('data', data)
         }
-    }
+    };
+    // 报告错误
     clickToReport = () => {
         let url = urlConfig.ReportURL + '/' + this._shareItem.classid + '/' + this._shareItem.id;
         this.props.navigation.navigate('Web', {url:url});
         this.close();
     }
-    clickToFavas = (classid,id) => {
+    // 添加到收藏
+    clickToFavas = (classid, id) => {
         let url = urlConfig.FavasURL + '/' + classid + '/' + id;
         if (global.userInfo) {
             this.props.navigation.navigate('Web', { url: url });
@@ -161,29 +152,37 @@ export default class Home extends Component {
             this.props.navigation.navigate('Login');
         }
     }
+    pushToUrls = (url) => {
+        if (url) {
+            Linking.openURL(url)
+                .catch((err) => {
+                    console.log('An error occurred', err);
+                });
+        }
+    }
     clickToShare = (type) => {
-        console.log('XXXXXXXXXXXXX',urlConfig.thumbImage);
+        console.log('XXXXXXXXXXXXX', urlConfig.thumbImage);
         this.close();
         WeChat.isWXAppInstalled().then((isInstalled) => {
             if (isInstalled) {
                 if (type === 'Session') {
                     WeChat.shareToSession({
-                        title: "【网名分享】",
-                        description: this._shareItem && this._shareItem.title.replace(/^(\r\n)|(\n)|(\r)/,""),
-                        type: 'text',
-                        webpageUrl: urlConfig.DetailUrl + this._shareItem.classid + '/' + this._shareItem.id,
-                        thumbImage: urlConfig.thumbImage,
-                    }).then((message)=>{message.errCode === 0  ? this.ToastShow('分享成功') : this.ToastShow('分享失败')}).catch((e)=>{if (error.message != -2) {
-                        Toast.show(error.message);
-                    }});
+                        imageUrl: this._shareItem && this._shareItem.nurl,
+                        titlepicUrl: this._shareItem && this._shareItem.titlepic,
+                        type: 'imageUrl',
+                        webpageUrl: urlConfig.DetailUrl + this._shareItem.classid + '/' + this._shareItem.id
+                    }).then((message) => { message.errCode === 0 ? this.ToastShow('分享成功') : this.ToastShow('分享失败') }).catch((e) => {
+                        if (error.message != -2) {
+                            Toast.show(error.message);
+                        }
+                    });
                 } else {
                     WeChat.shareToTimeline({
-                        title: "【网名分享】" + this._shareItem && this._shareItem.title.replace(/^(\r\n)|(\n)|(\r)/,""),
-                        description: this._shareItem && this._shareItem.title.replace(/^(\r\n)|(\n)|(\r)/,""),
-                        type: 'text',
-                        webpageUrl: urlConfig.DetailUrl + this._shareItem.classid + '/' + this._shareItem.id,
-                        thumbImage: urlConfig.thumbImage,
-                    }).then((message)=>{message.errCode === 0  ? this.ToastShow('分享成功') : this.ToastShow('分享失败')}).catch((error) => {
+                        imageUrl: this._shareItem && this._shareItem.nurl,
+                        titlepicUrl: this._shareItem && this._shareItem.titlepic,
+                        type: 'imageUrl',
+                        webpageUrl: urlConfig.DetailUrl + this._shareItem.classid + '/' + this._shareItem.id
+                    }).then((message) => { message.errCode === 0 ? this.ToastShow('分享成功') : this.ToastShow('分享失败') }).catch((error) => {
                         if (error.message != -2) {
                             Toast.show(error.message);
                         }
@@ -245,6 +244,33 @@ export default class Home extends Component {
             </TouchableWithoutFeedback>
         );
     };
+
+    //保存图片
+    saveImg(img) {
+        console.log('img====',img);
+        var promise = CameraRoll.saveToCameraRoll(img);
+        console.log(promise);
+        promise.then(function (result) {
+            Toast.show('保存成功,请到相册查看。', {
+                duration: Toast.durations.SHORT,
+                position: Toast.positions.CENTER,
+                shadow: true,
+                animation: true,
+                hideOnPress: true,
+                delay: 0,
+            });
+        }).catch(function (error) {
+            Toast.show('保存失败！\n' + error, {
+                duration: Toast.durations.SHORT,
+                position: Toast.positions.CENTER,
+                shadow: true,
+                animation: true,
+                hideOnPress: true,
+                delay: 0,
+            });
+        });
+    }
+
     show = (item)=>{
         this._shareItem = item;
         if(Platform.OS==='android'){
@@ -261,6 +287,8 @@ export default class Home extends Component {
             easing: Easing.linear // 缓动函数
         }).start());
     };
+
+
     close = ()=>{
         this.setState({
             visible:false
@@ -269,6 +297,7 @@ export default class Home extends Component {
     dealWithrequestPage = () =>{
         return  this.requestPageNumber > 1 ? '&page=' + this.requestPageNumber : ''
     }
+
     loadData = async(resolve)=>{
         let url = '';
         if (!this.props.data) {
@@ -276,10 +305,10 @@ export default class Home extends Component {
         }
         switch (this.props.data.classid) {
             case '0':
-                url =  urlConfig.sectionListData + '&classid=' + this.props.data.classid;
+                url =  urlConfig.sectionListDataTouxiang + '&classid=' + this.props.data.classid;;
                 break;
             default:
-                url = this.isNotfirstFetch ?  urlConfig.sectionListData + '&classid=' + this.props.data.classid :  urlConfig.sectionListData + '&classid=' + this.props.data.classid;
+                url = this.isNotfirstFetch ?  urlConfig.sectionListDataTouxiang + '&classid=' + this.props.data.classid : urlConfig.sectionListDataTouxiang + '&classid=' + this.props.data.classid;
         }
         console.log('loadUrl',url);
         let res = await HttpUtil.GET(url);
@@ -300,9 +329,12 @@ export default class Home extends Component {
         this.flatList && this.flatList.setData(this.dealWithLongArray(result), 0);
         console.log('res', res);
     };
+
     dealWithLongArray = (dataArray) => {
+        // let waitDealArray = this._shareItem.concat(dataArray);
         //下拉刷新来几条数据，就对应的删除几条数据 ，以便填充
         let initArray = [];
+        // console.log('789', sbArray);
         if (this.FlatListData){
             if (this.FlatListData.length > dataArray.length ){
                 initArray = this.FlatListData.slice(dataArray.length,this.FlatListData.length);
@@ -319,6 +351,7 @@ export default class Home extends Component {
         return waitDealArray;
     }
     dealWithLoadMoreData = (dataArray) => {
+        // let waitDealArray = this._shareItem.concat(dataArray);
         console.log('loadMoreData',dataArray);
         let waitDealArray =this.FlatListData.concat(dataArray).filter((value)=>{return !(!value || value === "");});
         console.log('loadMoreDatacontact',waitDealArray);
@@ -345,9 +378,7 @@ export default class Home extends Component {
             delay: 0,
         });
     }
-    navigateToDetail = () => {
-        this.props.navigation.navigate('Detail', { data: this.state.data[index] });
-    }
+
     PostThumb = async(item,dotop,index) => {
         try {
             let upDownData = [].concat(JSON.parse(JSON.stringify(this.FlatListData)));
@@ -376,98 +407,63 @@ export default class Home extends Component {
             formData.append("ajaxarea", "diggnum");
             let res = await HttpUtil.POST(url,formData,'dotop');
             if (!res){
+                this.ToastShow('失败');
                 return ;
             }
             let message = '';
             let array = res._bodyInit.split('|');
             if (array.length > 0) {
-            message = array[array.length - 1];
+                message = array[array.length - 1];
             }
-             if (message === '谢谢您的支持' || message === '谢谢您的意见') {
-             this.flatList.setData(upDownData);
-                         //只能操作数据源修改列表数据  很大的损耗啊
-             this.FlatListData = upDownData;
-             }
-             this.ToastShow(message);
+            if (message === '谢谢您的支持' || message === '谢谢您的意见') {
+                this.flatList.setData(upDownData);
+                //只能操作数据源修改列表数据  很大的损耗啊
+                this.FlatListData = upDownData;
+            }
+            this.ToastShow(message);
         }catch (e){}
     }
-
-    renderTextAndImage = (item,index) => {
-        if (item.classid == '80' || item.classid == '85' || item.classid == '86' || item.classid == '87'){
-            return <View>
-                <Text style={{
-                    fontSize: 18,
-                    lineHeight: 26,
-                    color: item.isCopyed ? '#666666' : 'black',
-                    paddingTop: 10,
-                    paddingBottom: 20,
-                    fontWeight: '300'
-                }} onPress={() => { this.setClipboardContent(item.title && item.title + item.ftitle && item.ftitle, index, item) }}>
-                    {item.title && item.title.replace(/(^\s*)|(\s*$)/g, "")}{'\n'}
-                    {item.ftitle && item.ftitle.replace(/(^\s*)|(\s*$)/g, "")}
-                </Text>
-            </View>
-        }else{
-            return <View>
-                <Text style={{
-                    fontSize: 18,
-                    lineHeight: 26,
-                    color: item.isCopyed ? '#666666' : 'black',
-                    paddingTop:10,
-                    paddingBottom: 10,
-                    fontWeight: '300'
-                }} onPress={() => { this.setClipboardContent(item.title && item.title + item.ftitle && item.ftitle, index, item) }}>
-                    {item.title && item.title.replace(/(^\s*)|(\s*$)/g, "")}{'\n'}
-                    {item.ftitle && item.ftitle.replace(/(^\s*)|(\s*$)/g, "")}
-                </Text>
-            </View>
-        }
+    renderTextAndImage = (item, index) => {
+        return <View style={{paddingBottom:20}}>
+            <Text activeOpacity={1} onPress={() => {}} style={{ lineHeight: 26, fontSize: 16, color: '#555' }}>
+                {item.nurl ? <ImageProgress
+                    source={{ uri: item.nurl }}
+                    resizeMode={'cover'}
+                    style={{ width: WIDTH - 40, height: 50 }}
+                /> : null}
+            </Text>
+        </View>
     }
-    pushToUrls = (url) => {
-        if (url) {
-            Linking.openURL(url)
-                .catch((err) => {
-                    console.log('An error occurred', err);
-                });
-        }
-    }
-    _renderItem = ({item, index}) => {
+    _renderItem = ({ item, index }) => {
         if (item.adType && item.picUrl) {
-           return  <TouchableOpacity activeOpacity={1} onPress={() => {
-               this.pushToUrls(item.goUrl)
+            return <TouchableOpacity activeOpacity={0.8} onPress={() => {
+                this.pushToUrls(item.goUrl)
             }}>
-               <View style={{backgroundColor:'#ffffff',flexDirection: 'row', paddingHorizontal: 20, paddingVertical:15, justifyContent: 'center',alignItems:'center'}}>
-                   { item.picUrl ? <ImageProgress
-                       source={{ uri: item.picUrl }}
-                       resizeMode={'cover'}
-                       indicator={Pie}
-                       indicatorProps={{
-                           size: 40,
-                           borderWidth: 0,
-                           color: 'rgba(255, 160, 0, 0.8)',
-                           unfilledColor: 'rgba(200, 200, 200, 0.1)'
-                       }}
-                       style={{width:WIDTH-40,height:100}} />  : null }
-               </View>
+                <View style={{ backgroundColor: '#ffffff', flexDirection: 'row', paddingHorizontal: 20, paddingVertical: 15, justifyContent: 'center', alignItems: 'center' }}>
+                    {item.picUrl ? <ImageProgress
+                        source={{ uri: item.picUrl }}
+                        resizeMode={'cover'}
+                        style={{ width: WIDTH - 40, height: 50 }} /> : null}
+                </View>
             </TouchableOpacity>
         }
         return (
-            <TouchableOpacity activeOpacity={1} onPress={() => {
+            <TouchableOpacity activeOpacity={0.6} onPress={() => {
             }}>
                 <View>
-                    {index === 0 ? <View style={{width:WIDTH,height:10,backgroundColor:Color.f5f5f5}}/> :<View/>}
-                    <View style={{ backgroundColor: 'white', paddingHorizontal: 20, paddingTop: 10, paddingBottom: 10}}>
-                        {this.renderTextAndImage(item,index)}
+                    {index === 0 ? <View style={{ width: WIDTH, height: 10, backgroundColor: Color.f5f5f5 }} /> : <View />}
+                    <View style={{ backgroundColor: 'white', paddingHorizontal: 20, paddingTop: 20 }}>
+                        {this.renderTextAndImage(item, index)}
                         <View
                             style={{
                                 flexDirection: 'row',
-                                marginBottom:5,
+                                marginBottom: 15,
                                 justifyContent: 'space-between',
                             }}>
-                            <View style={{flexDirection: 'row'}}>
+                            <View style={{ flexDirection: 'row' }}>
                                 {item.classname ? <Text style={{
-                                    paddingHorizontal: 6,
-                                    paddingVertical: 2,
+                                    paddingHorizontal: 10,
+                                    paddingVertical: 6,
                                     borderWidth: 1,
                                     borderRadius: 10,
                                     paddingLeft: 10,
@@ -480,22 +476,27 @@ export default class Home extends Component {
                                     }}>
                                     {item.classname && item.classname}
                                 </Text> : <View />}
-                                
+
                             </View>
-                            <View style={{flexDirection: 'row'}}>
-                                <View style={{ flexDirection: 'row',marginLeft: 20}}>
-                                    <TouchableOpacity activeOpacity={1} onPress={()=>{this.PostThumb(item,1,index)}} hitSlop={{left:10,right:10,top:10,bottom:10}}>
-                                        {item.isLike ?   <IconSimple name="like" size={20} color='red'/> : <IconSimple name="like" size={20} color='#888'/>}
+                            <View style={{ flexDirection: 'row' }}>
+                                <View style={{ flexDirection: 'row', marginLeft: 20 }}>
+                                    <TouchableOpacity activeOpacity={0.6} onPress={() => { this.PostThumb(item, 1, index) }} hitSlop={{ left: 10, right: 10, top: 10, bottom: 10 }}>
+                                        {item.isLike ? <IconSimple name="like" size={20} color='#027fff' /> : <IconSimple name="like" size={20} color='#888' />}
                                     </TouchableOpacity>
                                 </View>
-                                <View style={{flexDirection: 'row', marginLeft: 20}}>
-                                    <TouchableOpacity activeOpacity={1} onPress={()=>{this.PostThumb(item,0,index)}} hitSlop={{left:10,right:10,top:10,bottom:10}}>
-                                        {item.isUnLike ?   <IconSimple name="dislike" size={20} color='red'/> : <IconSimple name="dislike" size={20} color='#888'/>}
+                                <View style={{ flexDirection: 'row', marginLeft: 20 }}>
+                                    <TouchableOpacity activeOpacity={0.6} onPress={() => { this.PostThumb(item, 0, index) }} hitSlop={{ left: 10, right: 10, top: 10, bottom: 10 }}>
+                                        {item.isUnLike ? <IconSimple name="dislike" size={20} color='#027fff' /> : <IconSimple name="dislike" size={20} color='#888' />}
                                     </TouchableOpacity>
                                 </View>
-                                <View style={{flexDirection: 'row', marginLeft: 20}}>
-                                    <TouchableOpacity activeOpacity={1} onPress={()=> { this.show(item)}} hitSlop={{left:10,right:10,top:10,bottom:10}}>
-                                        <IconSimple name="share" size={20} color='#888'/>
+                                <View style={{ flexDirection: 'row', marginLeft: 20 }}>
+                                    <TouchableOpacity activeOpacity={0.6} onPress={() => { this.show(item) }} hitSlop={{ left: 10, right: 10, top: 10, bottom: 10 }}>
+                                        <IconSimple name="share" size={20} color='#888' />
+                                    </TouchableOpacity>
+                                </View>
+                                <View style={{ flexDirection: 'row', marginLeft: 20 }}>
+                                    <TouchableOpacity activeOpacity={0.6} onPress={this.saveImg.bind(this, item.nurl)} hitSlop={{ left: 10, right: 10, top: 10, bottom: 10 }}>
+                                        <MaterialIcons name="add-to-photos" size={20} color='#888' />
                                     </TouchableOpacity>
                                 </View>
                             </View>
@@ -505,9 +506,26 @@ export default class Home extends Component {
             </TouchableOpacity>
         )
     }
+
+// <PullList
+// type = "wait"
+// style={{height:HEIGHT-SCALE(94)}}
+// ref={(list)=> this.ultimateListView = list}
+// onPullRelease={this.onPullRelease}
+// onEndReached={this.loadMore}
+// renderItem={this.renderRowView}
+// numColumns={1}
+// initialNumToRender={5}
+// key={'list'}
+// />
     onPullRelease = async (resolve) => {
         this.loadData(resolve);
     };
+
+
+
+
+
     loadMore = async()=>{
         let url = '';
         this.requestPageNumber += 1;
@@ -516,10 +534,10 @@ export default class Home extends Component {
         }
         switch (this.props.data.classid) {
             case '0':
-                url =  urlConfig.sectionListData + '&classid=' + this.props.data.classid + this.dealWithrequestPage();
+                url =  urlConfig.sectionListDataTouxiang + '&classid=' + this.props.data.classid + this.dealWithrequestPage();
                 break;
             default:
-                url = this.isNotfirstFetch ?  urlConfig.sectionListData + '&classid=' + this.props.data.classid +  this.dealWithrequestPage():urlConfig.sectionListData + '&classid=' + this.props.data.classid+ this.dealWithrequestPage();
+                url = this.isNotfirstFetch ? urlConfig.sectionListDataTouxiang + '&classid=' + this.props.data.classid +  this.dealWithrequestPage():urlConfig.sectionListDataTouxiang + '&classid=' + this.props.data.classid+ this.dealWithrequestPage();
 
         }
         let res = await HttpUtil.GET(url);
@@ -530,12 +548,13 @@ export default class Home extends Component {
         this.flatList && this.flatList.setData(this.dealWithLoadMoreData(result));
         console.log('res', res);
     };
+
     _keyExtractor = (item, index) => index;
     render() {
         return (
-            <View style={{flex: 1}} >
-                <View style={{ width: WIDTH, height: 10, backgroundColor: Color.f5f5f5 }} />
+            <View style={styles.wrap} >
                 <PullList
+                    //  data={this._shareItem}
                     keyExtractor={this._keyExtractor}
                     onPullRelease={this.onPullRelease}
                     renderItem={this._renderItem}
@@ -553,6 +572,15 @@ export default class Home extends Component {
     }
 }
 const styles = StyleSheet.create({
+    wrap: {
+        flex: 1,
+        ...ifIphoneX({
+            backgroundColor: '#fff',
+            paddingBottom: 30
+        }, {
+
+            }),
+    },
     base: {
         flex: 1
     },

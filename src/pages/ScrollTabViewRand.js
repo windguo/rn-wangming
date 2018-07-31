@@ -55,7 +55,7 @@ export  default  class ScrollTabView extends Component {
     static navigationOptions = {
         tabBarLabel: '心情签名',
         tabBarIcon: ({tintColor,focused}) => (
-            <IconSimple name="bubble" size={22} color={focused ? "red":'black'} />
+            <IconSimple name="bubble" size={22} color={focused ? "red":'#666'} />
         ),
         header: ({navigation}) => {
             return (
@@ -229,6 +229,7 @@ export  default  class ScrollTabView extends Component {
                 activeTextColor='red'
                 underlineStyle={{ height: 0, width: 0 }}
                 backgroundColor='white'
+                style={{ marginLeft: 20, marginRight: 20 }}
                 textStyle={{
                     fontSize: 16,
                     fontWeight: '100'
@@ -284,6 +285,15 @@ export  default  class ScrollTabView extends Component {
             return (
                 <View style={styles.wrap}>
                     {/* {Platform.OS === 'ios' ? <StatusBar barStyle="light-content"/> : null} */}
+                    {/* <View style={styles.cRightEditIcon}>
+                        <TouchableOpacity activeOpacity={0.6} onPress={() => {
+                            this.props.navigation.navigate('SearchTag')
+                        }}>
+                            <View style={{ justifyContent: 'center', fontWeight: '100', marginLeft: 10, alignItems: 'center', height: 43.7 }}>
+                                <MaterialIcons name="search" size={25} color='#666' />
+                            </View>
+                        </TouchableOpacity>
+                    </View> */}
                     <ScrollableTabView renderTabBar={this.renderTabBar} page={this.state.page}>
                         {this.renderContent(this.state.sectionList)}
                     </ScrollableTabView>
