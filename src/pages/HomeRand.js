@@ -528,7 +528,7 @@ export default class Home extends Component {
     render() {
         return (
             <View style={{flex: 1}} >
-                <View style={{ width: WIDTH, height: 10, backgroundColor: Color.f5f5f5 }} />
+                {/* <View style={{ width: WIDTH, height: 10, backgroundColor: Color.f5f5f5 }} /> */}
                 <PullList
                     //  data={this.state.data}
                     keyExtractor={this._keyExtractor}
