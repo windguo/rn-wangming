@@ -55,7 +55,7 @@ import HttpUtil from  '../utils/HttpUtil';
 const NativeVersion = DeviceInfo.getVersion();
 export  default  class ScrollTabView extends Component {
     static navigationOptions = {
-        tabBarLabel: '发布信息',
+        tabBarLabel: '我要发布',
         tabBarIcon: ({tintColor,focused}) => (
             <MaterialIcons name="add-circle-outline" size={26} color={focused ? "red" : '#666'} />
         ),
@@ -516,8 +516,10 @@ export  default  class ScrollTabView extends Component {
         let url = '';
         if (params === 'publishWangming') {
             url = urlConfig.publishWangming;
-        } else if (params === 'yhsyxy') {
-            url = urlConfig.agreementURL;
+        } else if (params === 'publishQianming') {
+            url = urlConfig.publishQianming;
+        } else if (params === 'publishDuanzi') {
+            url = urlConfig.publishDuanzi;
         }
         this.props.navigation.navigate('Web', { url: url });
     }
@@ -535,7 +537,7 @@ export  default  class ScrollTabView extends Component {
                     </View>
                 </TouchableOpacity>
                 <View style={{ width: WIDTH, height: 10, backgroundColor: Color.f5f5f5 }} />
-                <TouchableOpacity activeOpacity={1} onPress={this.clickToPublishWangming}>
+                <TouchableOpacity activeOpacity={1} onPress={() => { this.pushToWeb('publishQianming') }}>
                     <View style={{ flexDirection: 'row', alignItems: 'center', height: 50, backgroundColor: 'white', justifyContent: 'space-between' }}>
                         <View style={{ marginLeft: 20, flexDirection: 'row', alignItems: 'center' }}>
                             <IconSimple name="user" size={22} color={Color.FontColor} />
@@ -545,21 +547,11 @@ export  default  class ScrollTabView extends Component {
                     </View>
                 </TouchableOpacity>
                 <View style={{ width: WIDTH, height: 10, backgroundColor: Color.f5f5f5 }} />
-                <TouchableOpacity activeOpacity={1} onPress={this.clickToPublishWangming}>
+                <TouchableOpacity activeOpacity={1} onPress={() => { this.pushToWeb('publishDuanzi') }}>
                     <View style={{ flexDirection: 'row', alignItems: 'center', height: 50, backgroundColor: 'white', justifyContent: 'space-between' }}>
                         <View style={{ marginLeft: 20, flexDirection: 'row', alignItems: 'center' }}>
                             <IconSimple name="user" size={22} color={Color.FontColor} />
                             <Text style={{ marginLeft: 10 }}>发布内涵段子</Text>
-                        </View>
-                        <IconSimple name="arrow-right" size={18} color={Color.FontColor} style={{ marginRight: 20 }} />
-                    </View>
-                </TouchableOpacity>
-                <View style={{ width: WIDTH, height: 10, backgroundColor: Color.f5f5f5 }} />
-                <TouchableOpacity activeOpacity={1} onPress={this.clickToPublishWangming}>
-                    <View style={{ flexDirection: 'row', alignItems: 'center', height: 50, backgroundColor: 'white', justifyContent: 'space-between' }}>
-                        <View style={{ marginLeft: 20, flexDirection: 'row', alignItems: 'center' }}>
-                            <IconSimple name="user" size={22} color={Color.FontColor} />
-                            <Text style={{ marginLeft: 10 }}>发布头像</Text>
                         </View>
                         <IconSimple name="arrow-right" size={18} color={Color.FontColor} style={{ marginRight: 20 }} />
                     </View>

@@ -52,7 +52,10 @@ export default urlConfig = {
      DetailUrl: "http://m.jianjie8.com/detail/",
      Search:'/e/api/wangming/?classid=29&getJson=',
     CreatUrl:'/e/api/wangming/creat/?getJson=c&keyword=',
-    publishWangming:'http://wangming.jianjie8.com/edit'
+
+    publishWangming:'http://publish.jianjie8.com/appPublish/wangming',
+    publishQianming:'http://publish.jianjie8.com/appPublish/qianming',
+    publishDuanzi:'http://publish.jianjie8.com/appPublish/duanzi'
 
 
 }

@@ -53,7 +53,7 @@ export  default  class web extends Component {
                         <IconSimple name="arrow-left" size={20}/>
                     </View>
                 </TouchableOpacity>
-                <Text style={{fontSize:17,textAlign:'center',fontWeight:'300',lineHeight:43.7}}> {navigation.state.routes[navigation.state.index].params && navigation.state.routes[navigation.state.index].params.WebTitle}</Text>
+                <Text style={{fontSize:16,textAlign:'center',fontWeight:'100',lineHeight:43.7}}> {navigation.state.routes[navigation.state.index].params && navigation.state.routes[navigation.state.index].params.WebTitle}</Text>
                 <TouchableOpacity activeOpacity={1} onPress={() => {
                 }}>
                     <View style={{justifyContent:'center',marginRight:10,alignItems:'center',height:43.7,backgroundColor:'transparent',width:20}}>

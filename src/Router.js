@@ -81,7 +81,7 @@ const _configureTransition = () => {
 const TabNavigaApp = TabNavigator({
     New: { screen: ScrollTabView },
     Rand: { screen: ScrollTabViewRand },
-    // ScrollTabViewAdd: { screen: ScrollTabViewAdd },
+    ScrollTabViewAdd: { screen: ScrollTabViewAdd },
     ScrollTabViewJoke: { screen: ScrollTabViewJoke },
     ScrollTabViewTouxiang: { screen: ScrollTabViewTouxiang },
     // My:{screen: My},

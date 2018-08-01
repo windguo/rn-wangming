@@ -117,8 +117,6 @@ export default class Login extends React.Component {
         this.props.navigation.goBack(null);
         this.props.navigation.state.params && this.props.navigation.state.params.callBack(res.result.username);
         DeviceEventEmitter.emit('LoginSuccess');
-
-
     }
     // <ScrollView  style={{ backgroundColor:'#eeeeee', width: WIDTH,flex:1}} contentContainerStyle={{alignItems:'center'}}>
     // </ScrollView>

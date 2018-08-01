@@ -58,10 +58,10 @@ export default class MyCollectLaugh extends Component {
                         navigation.goBack(null);
                     }}>
                         <View style={{justifyContent:'center',marginLeft:10,alignItems:'center',height:43.7}}>
-                            <IconSimple name="arrow-left" size={20} color='white'/>
+                            <IconSimple name="arrow-left" size={20}/>
                         </View>
                     </TouchableOpacity>
-                    <Text style={{fontSize:17,textAlign:'center',fontWeight:'bold',lineHeight:43.7,color:'white'}}>我发布的内容</Text>
+                    <Text style={{fontSize:16,textAlign:'center',fontWeight:'100',lineHeight:43.7}}>我发布的内容</Text>
                     <TouchableOpacity activeOpacity={1} onPress={() => {
                     }}>
                         <View style={{justifyContent:'center',marginRight:10,alignItems:'center',height:43.7,backgroundColor:'transparent',width:20}}>
@@ -113,36 +113,35 @@ export default class MyCollectLaugh extends Component {
         }catch (e){}
     }
 
-    share = async()=>{
-        //    alert(JSON.stringify(this._shareItem));
+    share = async () => {
         let data = await NativeModules.NativeUtil.showDialog();
-        if (data.wechat === 3){
+        if (data.wechat === 3) {
             this.clickToReport();
             return;
         }
-        if(data){
+        if (data) {
             WeChat.isWXAppInstalled().then((isInstalled) => {
                 if (isInstalled) {
                     if (data.wechat === 1) {
                         WeChat.shareToSession({
                             title: "【网名分享】",
-                            description: this._shareItem && this._shareItem.title.replace(/^(\r\n)|(\n)|(\r)/,""),
-                            type: 'news',
+                            description: this._shareItem && this._shareItem.title.replace(/^(\r\n)|(\n)|(\r)/, ""),
+                            type: 'text',
                             webpageUrl: urlConfig.DetailUrl + this._shareItem.classid + '/' + this._shareItem.id,
                             thumbImage: urlConfig.thumbImage,
-                        }).then((message)=>{message.errCode === 0  ? this.ToastShow('分享成功') : this.ToastShow('分享失败')}).catch((error) => {
+                        }).then((message) => { message.errCode === 0 ? this.ToastShow('分享成功') : this.ToastShow('分享失败') }).catch((error) => {
                             if (error.message != -2) {
                                 Toast.show(error.message);
                             }
                         });
-                    } else if(data.wechat === 2){
+                    } else if (data.wechat === 2) {
                         WeChat.shareToTimeline({
-                            title: "【网名分享】" + this._shareItem && this._shareItem.title.replace(/^(\r\n)|(\n)|(\r)/,""),
-                            description: this._shareItem && this._shareItem.title.replace(/^(\r\n)|(\n)|(\r)/,""),
-                            type: 'news',
+                            title: "【网名分享】" + this._shareItem && this._shareItem.title.replace(/^(\r\n)|(\n)|(\r)/, ""),
+                            description: this._shareItem && this._shareItem.title.replace(/^(\r\n)|(\n)|(\r)/, ""),
+                            type: 'text',
                             webpageUrl: urlConfig.DetailUrl + this._shareItem.classid + '/' + this._shareItem.id,
                             thumbImage: urlConfig.thumbImage,
-                        }).then((message)=>{message.errCode === 0  ? this.ToastShow('分享成功') : this.ToastShow('分享失败')}).catch((error) => {
+                        }).then((message) => { message.errCode === 0 ? this.ToastShow('分享成功') : this.ToastShow('分享失败') }).catch((error) => {
                             if (error.message != -2) {
                                 Toast.show(error.message);
                             }
@@ -152,7 +151,7 @@ export default class MyCollectLaugh extends Component {
                     Toast.show("没有安装微信软件，请您安装微信之后再试");
                 }
             });
-            console.log('data',data)
+            console.log('data', data)
         }
     }
     clickToReport = () => {
@@ -161,34 +160,36 @@ export default class MyCollectLaugh extends Component {
         this.close();
     }
     clickToShare = (type) => {
+        console.log('XXXXXXXXXXXXX', urlConfig.thumbImage);
         this.close();
         WeChat.isWXAppInstalled().then((isInstalled) => {
             if (isInstalled) {
                 if (type === 'Session') {
                     WeChat.shareToSession({
                         title: "【网名分享】",
-                        description: this._shareItem && this._shareItem.title.replace(/^(\r\n)|(\n)|(\r)/,""),
-                        type: 'news',
+                        description: this._shareItem && this._shareItem.title.replace(/^(\r\n)|(\n)|(\r)/, ""),
+                        type: 'text',
                         webpageUrl: urlConfig.DetailUrl + this._shareItem.classid + '/' + this._shareItem.id,
                         thumbImage: urlConfig.thumbImage,
-                    }).then((message)=>{message.errCode === 0  ? this.ToastShow('分享成功') : this.ToastShow('分享失败')}).catch((e)=>{if (error.message != -2) {
-                        Toast.show(error.message);
-                    }});
+                    }).then((message) => { message.errCode === 0 ? this.ToastShow('分享成功') : this.ToastShow('分享失败') }).catch((e) => {
+                        if (error.message != -2) {
+                            Toast.show(error.message);
+                        }
+                    });
                 } else {
                     WeChat.shareToTimeline({
-                        title: "【网名分享】" + this._shareItem && this._shareItem.title.replace(/^(\r\n)|(\n)|(\r)/,""),
-                        description: this._shareItem && this._shareItem.title.replace(/^(\r\n)|(\n)|(\r)/,""),
-                        type: 'news',
+                        title: "【网名分享】" + this._shareItem && this._shareItem.title.replace(/^(\r\n)|(\n)|(\r)/, ""),
+                        description: this._shareItem && this._shareItem.title.replace(/^(\r\n)|(\n)|(\r)/, ""),
+                        type: 'text',
                         webpageUrl: urlConfig.DetailUrl + this._shareItem.classid + '/' + this._shareItem.id,
                         thumbImage: urlConfig.thumbImage,
-                    }).then((message)=>{message.errCode === 0  ? this.ToastShow('分享成功') : this.ToastShow('分享失败')}).catch((error) => {
+                    }).then((message) => { message.errCode === 0 ? this.ToastShow('分享成功') : this.ToastShow('分享失败') }).catch((error) => {
                         if (error.message != -2) {
                             Toast.show(error.message);
                         }
                     });
                 }
             } else {
-                //Toast.show("没有安装微信软件，请您安装微信之后再试");
             }
         });
     }
@@ -383,8 +384,8 @@ export default class MyCollectLaugh extends Component {
                     paddingBottom: 10,
                     fontWeight: '300'
                 }} onPress={() => { this.setClipboardContent(item.title && item.title, index, item) }}>
-                    {item.title && item.title.replace(/^(\r\n)|(\n)|(\r)/, "")}{'\n'}
-                    {item.ftitle && item.ftitle.replace(/^(\r\n)|(\n)|(\r)/, "")}
+                    {item.title && item.title.replace(/(^\s*)|(\s*$)/g, "")}{'\n'}
+                    {item.ftitle && item.ftitle.replace(/(^\s*)|(\s*$)/g, "")}
                 </Text>
             </View>
         } else {
@@ -396,7 +397,8 @@ export default class MyCollectLaugh extends Component {
                     paddingBottom: 10,
                     fontWeight: '300'
                 }} onPress={() => { this.setClipboardContent(item.title && item.title + item.ftitle && item.ftitle, index, item) }}>
-                    {item.title && item.title.replace(/^(\r\n)|(\n)|(\r)/, "")}{'\n'}                     {item.ftitle && item.ftitle.replace(/^(\r\n)|(\n)|(\r)/, "")}
+                    {item.title && item.title.replace(/(^\s*)|(\s*$)/g, "")}{'\n'}
+                    {item.ftitle && item.ftitle.replace(/(^\s*)|(\s*$)/g, "")}
                 </Text>
             </View>
         }
@@ -425,33 +427,6 @@ export default class MyCollectLaugh extends Component {
             }}>
                 <View>
                     {index === 0 ? <View style={{width:WIDTH,height:10,backgroundColor:Color.f5f5f5}}/> :<View/>}
-                    <View style={{ backgroundColor:'#ffffff',flexDirection: 'row', paddingHorizontal: 20, paddingTop: 15, justifyContent: 'space-between' }}>
-                        <View style={{ flexDirection: 'row' }}>
-                            <Text style={{ color: '#666666', fontWeight: '100' }} onPress={() => {
-                                this.props.navigation.navigate('User', {
-                                    username: item.username,
-                                    userid: item.userid
-                                });
-                            }}>
-                                ^
-                                <Text>
-                                    {item.username}
-                                </Text>
-                                ^
-                            </Text>
-                        </View>
-                        <View style={{ flexDirection: 'row' }}>
-                            <View>
-                                <Text style={{
-                                    paddingVertical: 2,
-                                    color: '#666666',
-                                    fontWeight: '100'
-                                }}>
-                                    {formatData(parseInt(item.newstime))}
-                                </Text>
-                            </View>
-                        </View>
-                    </View>
                     <View style={{ backgroundColor: 'white', paddingHorizontal: 20,paddingTop:10}}>
                         {this.renderTextAndImage(item,index)}
                         <View
